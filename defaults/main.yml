@@ -5,7 +5,68 @@ peertube_version: v1.0.0-beta.3
 peertube_user_path: /var/www/peertube
 peertube_proxy_handle_https: no
 peertube_proxy_ips: []
-
 peertube_dbuser_password: "{{ lookup('password', 'credentials/peertube/db-' + inventory_hostname) }}"
 peertube_user_password_hashed: "{{ lookup('password', 'credentials/peertube/user-' + inventory_hostname) |password_hash('sha512') }}"
 peertube_web_admin_password: "{{ lookup('password', 'credentials/peertube/web-admin-' + inventory_hostname) }}"
+peertube_admin_email: 'admin@example.com'
+peertube_dbuser: peertube
+
+peertube_listen:
+  hostname: localhost
+  port: 9000
+
+peertube_webserver:
+  https: true
+  hostname: '{{ inventory_hostname }}'
+  port: 443
+
+peertube_database:
+  hostname: 'localhost'
+  port: 5432
+  ssl: false
+  suffix: '_prod'
+  username: '{{ peertube_dbuser }}'
+  password: '{{ peertube_dbuser_password }}'
+  pool:
+    max: 5
+
+peertube_storage:
+  tmp: '/tmp/'
+  avatars: '/avatars/'
+  videos: '/videos/'
+  streaming_playlists: '/streaming_playlists/'
+  redundancy: '/redundancy/'
+  logs: '/logs/'
+  previews: '/previews/'
+  thumbnails: '/thumbnails/'
+  torrents: '/torrents/'
+  captions: '/captions/'
+  cache: '/cache/'
+  plugins: '/plugin/'
+  client_overrides: '/client_overrides/'
+
+peertube_settings_ldap:
+#  url: "ldaps://ldap.com.yy:636"
+#  weight: "100"
+#  bind-dn: "cn=admin,ou=group,dc=ldap,dc=com,dc=yy"
+#  custom-ca: ""
+#  search-base: "ou=group,dc=ldap,dc=com,dc=yy"
+#  group-filter: !unsafe "(member={{dn}})"
+#  insecure-tls: false
+#  mail-property: "mail"
+#  search-filter: !unsafe "(cn={{username}})"
+#  bind-credentials: "xxxxx"
+#  username-property: "cn"
+
+peertube_instance:
+  name: 'Peertube'
+  short_description: 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.'
+  description: 'Welcome to this PeerTube instance!'
+  terms: 'No terms for now.'
+  code_of_conduct:
+  creation_reason: ''
+  administrator: ''
+  maintenance_lifetime: ''
+  moderation_information: ''
+  business_model: ''
+  hardware_information: ''

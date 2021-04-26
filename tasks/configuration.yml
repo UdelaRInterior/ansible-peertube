@@ -1,0 +1,123 @@
+
+- name: Add peertube user
+  user:
+    name: peertube
+    home: "{{ peertube_user_path }}"
+    shell: /bin/bash
+    password: "{{ peertube_user_password_hashed }}"
+
+- name: Create required directories
+  file:
+    path: "{{ peertube_user_path }}/{{ item }}"
+    state: directory
+    owner: peertube
+    group: peertube
+    mode: 0755
+  with_items:
+    - config
+    - storage
+    - versions
+
+- stat: path={{ peertube_user_path }}/versions/peertube-{{ peertube_version }}
+  register: peertube_version_dir
+
+- name: Download and extract Peertube
+  unarchive:
+    src: "https://github.com/Chocobozzz/PeerTube/releases/download/{{ peertube_version }}/peertube-{{ peertube_version }}.zip"
+    dest: "{{ peertube_user_path }}/versions"
+    remote_src: yes
+    owner: peertube
+    group: peertube
+  when: peertube_version_dir.stat.exists == False
+  register: fresh_install
+
+- stat: path={{ peertube_user_path }}/peertube-latest
+  register: peertube_latest_dir
+
+- name: Create symlink peertube-latest
+  file:
+    src: "{{ peertube_user_path }}/versions/peertube-{{ peertube_version }}"
+    dest: "{{ peertube_user_path }}/peertube-latest"
+    state: link
+    owner: peertube
+    group: peertube
+  when: peertube_latest_dir.stat.exists == False
+
+- name: Change owner of all peertube directories # seems setting owner on unarchive is not enough…
+  file:
+    path: "{{ peertube_user_path }}"
+    owner: peertube
+    group: peertube
+    recurse: yes
+
+- name: Copy configuration peertube
+  template:
+    src: "production.yaml.j2"
+    dest: '{{ peertube_user_path }}/config/production.yaml'
+    owner: peertube
+    group: peertube
+    mode: 0644
+  notify:
+    - restart peertube daemon
+
+- name: Install "auth-ldap" npm package
+  become: true
+  become_user: peertube
+  shell: '{{ item }}'
+  with_items:
+    - cd "{{ peertube_user_path }}/peertube-latest" && npm i peertube-plugin-auth-ldap
+    - cd "{{ peertube_user_path }}/peertube-latest" && npm i peertube-plugin-bittube-logo-favicon
+
+- name: Yarn install
+  become: true
+  become_user: peertube
+  shell: cd "{{ peertube_user_path }}/peertube-latest" && yarn install --production --pure-lockfile
+  when: fresh_install is changed
+
+- name: Install Stretch backports repo
+  apt_repository:
+    repo: deb http://ftp.debian.org/debian stretch-backports main
+    state: present
+  when:
+    - (ansible_distribution_major_version == "9")
+  register: backports_installed
+
+- name: Change apt_preference
+  copy:
+    content: 'APT::Default-Release "stable";'
+    dest: /etc/apt/apt.conf.d/99apt_default
+    mode: 644
+  when: backports_installed is changed
+
+- name: Install Peertube daemon
+  template:
+    src: peertube.service
+    dest: /etc/systemd/system/
+  notify:
+    - install peertube daemon
+
+- name: Add tools in $PATH
+  become: true
+  become_user: peertube
+  lineinfile:
+    path: "{{ peertube_user_path }}/.bashrc"
+    state: present
+    line: 'export PATH="$PATH:{{ peertube_user_path }}/peertube-latest/dist/server/tools/"'
+
+- pause:
+    minutes: 5
+
+- name: Copy script
+  template:
+    src: "enabledLDAP.sql"
+    dest: /tmp/enabledLDAP.sql
+    owner: postgres
+    mode: 0755
+
+- name: Add user and Enabled LDAP
+  become: yes
+  become_user: postgres
+  command: psql -d peertube_prod -U postgres -f '/tmp/enabledLDAP.sql'
+  when:
+    - fresh_install is changed
+    - peertube_ldap is defined

@@ -1,0 +1,23 @@
+
+- name: Copy nginx conf file
+  template:
+    src: "nginx-peertube"
+    dest: /etc/nginx/sites-available/peertube
+    mode: 0644
+  notify:
+    - reload nginx
+
+- name: Enable nginx conf file
+  file:
+    src: /etc/nginx/sites-available/peertube
+    dest: /etc/nginx/sites-enabled/peertube
+    state: link
+  notify:
+    - reload nginx
+
+- name: Remove default nginx conf file
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify:
+    - reload nginx
