@@ -1,47 +1,3 @@
-INSERT INTO "user" (
-  password,
-  username,
-  email,
-  "nsfwPolicy",
-  "webTorrentEnabled",
-  "videosHistoryEnabled",
-  "autoPlayVideo",
-  "autoPlayNextVideo",
-  "autoPlayNextVideoPlaylist",
-  "adminFlags",
-  blocked,
-  role,
-  "videoQuota",
-  "videoQuotaDaily",
-  theme,
-  "noInstanceConfigWarningModal",
-  "noWelcomeModal",
-  "pluginAuth",
-  "feedToken",
-  "createdAt",
-  "updatedAt")
-VALUES (
-  'noimporta',
-  '{{ peertube_ldap.user }}',
-  '{{ peertube_ldap.email }}',
-  'do_not_list',
-  't',
-  't',
-  't',
-  'f',
-  't',
-  0,
-  'f',
-  2,
-  -1,
-  -1,
-  'instance-default',
-  't',
-  'f',
-  'peertube-plugin-auth-ldap',
-  'e542cc15-eba7-47cb-a77b-55484aede8c4',
-  current_date,
-  current_date);
 
 INSERT INTO "plugin" (
   name,
@@ -107,4 +63,4 @@ VALUES (
   current_date,
   current_date);
 
-UPDATE "user" set "password" = '{{ peertube_dbuser_password |password_hash('sha512') }}' where "username" = 'root';
+UPDATE "user" set "password" = '{{ peertube_dbuser_password }}' where "username" = 'root';

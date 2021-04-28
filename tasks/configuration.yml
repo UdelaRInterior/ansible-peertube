@@ -104,8 +104,15 @@
     state: present
     line: 'export PATH="$PATH:{{ peertube_user_path }}/peertube-latest/dist/server/tools/"'
 
-- pause:
-    minutes: 5
+- name: Update dependencies
+  become: true
+  become_user: peertube
+  shell: '{{ item }}'
+  with_items:
+    - cd "{{ peertube_user_path }}/peertube-latest" && npm install
+    - cd "{{ peertube_user_path }}/peertube-latest/client" && npm install
+    - cd "{{ peertube_user_path }}/peertube-latest" && yarn install --production --pure-lockfile
+    - cd "{{ peertube_user_path }}/peertube-latest/client" && yarn install --pure-lockfile
 
 - name: Copy script
   template:

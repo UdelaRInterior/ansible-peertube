@@ -1,6 +1,16 @@
 ---
 
-#  - use include_tasks to group them
+- name: Install Yarn apt key
+  apt_key:
+    url: https://dl.yarnpkg.com/debian/pubkey.gpg
+    state: present
+
+- name: Add Yarn apt repo
+  apt_repository:
+    repo: deb https://dl.yarnpkg.com/debian/ stable main
+    state: present
+    filename: yarn
+
 - name: Install dependencies
   apt:
     name: '{{ item }}'
@@ -22,6 +32,7 @@
     - build-essential
     - apt-transport-https
     - python-ruamel.yaml
+    - yarn
 
 # Configure nodejs
 - name: Install NodeJS apt key
@@ -31,7 +42,7 @@
 
 - name: Add NodeJS apt repository
   apt_repository:
-    repo: deb https://deb.nodesource.com/node_12.x "{{ ansible_distribution_release }}" main
+    repo: deb https://deb.nodesource.com/node_"{{ peertube_nodejs_version }}".x "{{ ansible_distribution_release }}" main
     state: present
     filename: nodesource
 
@@ -40,20 +51,3 @@
     update_cache: yes
     pkg: nodejs
     state: present
-
-- name: Install Yarn apt key
-  apt_key:
-    url: https://dl.yarnpkg.com/debian/pubkey.gpg
-    state: present
-
-- name: Add Yarn apt repo
-  apt_repository:
-    repo: deb https://dl.yarnpkg.com/debian/ stable main
-    state: present
-    filename: yarn
-
-- name: Install Yarn
-  apt:
-    update_cache: yes
-    pkg: yarn
-    state: latest
