@@ -71,3 +71,22 @@ peertube_instance:
   moderation_information: ''
   business_model: ''
   hardware_information: ''
+
+peertube_live:
+  enabled: true
+  max_duration: -1
+  max_instance_lives: 20
+  max_user_lives: 3
+  allow_replay: true
+  rtmp:
+    port: 1935
+  transcoding:
+    enabled: true
+    threads: 2
+    resolutions:
+      very_small: false #240p
+      small: false #360p
+      normal: false #480p
+      standard: false #720p
+      hd: false #1080p
+      full_hd: false #2160p

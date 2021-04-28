@@ -258,42 +258,42 @@ transcoding:
     enabled: false
 
 live:
-  enabled: false
+  enabled: {{ peertube_live.enabled }}
 
   # Limit lives duration
   # Set null to disable duration limit
-  max_duration: -1 # For example: '5 hours'
+  max_duration: {{ peertube_live.max_duration }} # For example: '5 hours'
 
   # Limit max number of live videos created on your instance
   # -1 == unlimited
-  max_instance_lives: 20
+  max_instance_lives: {{ peertube_live.max_instance_lives }}
 
   # Limit max number of live videos created by a user on your instance
   # -1 == unlimited
-  max_user_lives: 3
+  max_user_lives: {{ peertube_live.max_user_lives }}
 
   # Allow your users to save a replay of their live
   # PeerTube will transcode segments in a video file
   # If the user daily/total quota is reached, PeerTube will stop the live
   # /!\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay
-  allow_replay: true
+  allow_replay: {{ peertube_live.allow_replay }}
 
   # Your firewall should accept traffic from this port in TCP if you enable live
   rtmp:
-    port: 1935
+    port: {{ peertube_live.rtmp.port }}
 
   # Allow to transcode the live streaming in multiple live resolutions
   transcoding:
-    enabled: true
-    threads: 2
+    enabled: {{ peertube_live.transcoding.enabled }}
+    threads: {{ peertube_live.transcoding.threads }}
 
     resolutions:
-      240p: false
-      360p: false
-      480p: false
-      720p: false
-      1080p: false
-      2160p: false
+      240p: {{ peertube_live.transcoding.resolutions.very_small }}
+      360p: {{ peertube_live.transcoding.resolutions.small }}
+      480p: {{ peertube_live.transcoding.resolutions.normal }}
+      720p: {{ peertube_live.transcoding.resolutions.standard }}
+      1080p: {{ peertube_live.transcoding.resolutions.hd }}
+      2160p: {{ peertube_live.transcoding.resolutions.full_hd }}
 
 import:
   # Add ability for your users to import remote videos (from YouTube, torrent...)
