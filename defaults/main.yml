@@ -90,3 +90,8 @@ peertube_live:
       standard: false #720p
       hd: false #1080p
       full_hd: false #2160p
+
+peertube_plugins:
+  - cd "{{ peertube_user_path }}/peertube-latest" && npm i peertube-plugin-auth-ldap
+  - cd "{{ peertube_user_path }}/peertube-latest" && npm i peertube-plugin-bittube-logo-favicon
+  - cd "{{ peertube_user_path }}/peertube-latest" && npm i peertube-theme-noussommes

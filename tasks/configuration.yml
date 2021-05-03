@@ -60,13 +60,11 @@
   notify:
     - restart peertube daemon
 
-- name: Install "auth-ldap" npm package
+- name: Install plugins npm package
   become: true
   become_user: peertube
   shell: '{{ item }}'
-  with_items:
-    - cd "{{ peertube_user_path }}/peertube-latest" && npm i peertube-plugin-auth-ldap
-    - cd "{{ peertube_user_path }}/peertube-latest" && npm i peertube-plugin-bittube-logo-favicon
+  with_items: "{{ peertube_plugins }}"
 
 - name: Yarn install
   become: true
