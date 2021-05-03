@@ -60,10 +60,15 @@
   notify:
     - restart peertube daemon
 
+- name: Display all variables/facts known for a host
+  debug:
+    var: peertube_plugins
+    verbosity: 4
+
 - name: Install plugins npm package
   become: true
   become_user: peertube
-  shell: '{{ item }}'
+  shell: cd {{ peertube_user_path }}/peertube-latest && {{ item }}
   with_items: "{{ peertube_plugins }}"
 
 - name: Yarn install

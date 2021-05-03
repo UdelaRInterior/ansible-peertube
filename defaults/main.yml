@@ -92,6 +92,6 @@ peertube_live:
       full_hd: false #2160p
 
 peertube_plugins:
-  - cd "{{ peertube_user_path }}/peertube-latest" && npm i peertube-plugin-auth-ldap
-  - cd "{{ peertube_user_path }}/peertube-latest" && npm i peertube-plugin-bittube-logo-favicon
-  - cd "{{ peertube_user_path }}/peertube-latest" && npm i peertube-theme-noussommes
+  - NODE_CONFIG_DIR={{ peertube_user_path }}/config NODE_ENV=production npm run plugin:install -- --npm-name peertube-plugin-auth-ldap
+  - NODE_CONFIG_DIR={{ peertube_user_path }}/config NODE_ENV=production npm run plugin:install -- --npm-name peertube-plugin-bittube-logo-favicon
+  - NODE_CONFIG_DIR={{ peertube_user_path }}/config NODE_ENV=production npm run plugin:install -- --npm-name peertube-theme-noussommes
