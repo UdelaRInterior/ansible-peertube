@@ -10,6 +10,7 @@ peertube_user_password_hashed: "{{ lookup('password', 'credentials/peertube/user
 peertube_web_admin_password: "{{ lookup('password', 'credentials/peertube/web-admin-' + inventory_hostname) }}"
 peertube_admin_email: 'admin@example.com'
 peertube_dbuser: peertube
+peertube_theme: default
 #Version 9 from Stretch and 12 from Buster
 peertube_nodejs_version: 12
 peertube_listen:

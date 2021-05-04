@@ -1,10 +1,10 @@
 
-#- include_tasks: install.yml
+- include_tasks: install.yml
 
-#- include_tasks: postgres.yml
+- include_tasks: postgres.yml
 
-#- include_tasks: nginx.yml
+- include_tasks: nginx.yml
 
-#- include_tasks: certbot.yml
+- include_tasks: certbot.yml
 
 - include_tasks: configuration.yml

@@ -1,4 +1,6 @@
 
+TRUNCATE TABLE plugin;
+
 INSERT INTO "plugin" (
   name,
   type,

@@ -65,18 +65,6 @@
     var: peertube_plugins
     verbosity: 4
 
-- name: Install plugins npm package
-  become: true
-  become_user: peertube
-  shell: cd {{ peertube_user_path }}/peertube-latest && {{ item }}
-  with_items: "{{ peertube_plugins }}"
-
-- name: Yarn install
-  become: true
-  become_user: peertube
-  shell: cd "{{ peertube_user_path }}/peertube-latest" && yarn install --production --pure-lockfile
-  when: fresh_install is changed
-
 - name: Install Stretch backports repo
   apt_repository:
     repo: deb http://ftp.debian.org/debian stretch-backports main
@@ -99,14 +87,6 @@
   notify:
     - install peertube daemon
 
-- name: Add tools in $PATH
-  become: true
-  become_user: peertube
-  lineinfile:
-    path: "{{ peertube_user_path }}/.bashrc"
-    state: present
-    line: 'export PATH="$PATH:{{ peertube_user_path }}/peertube-latest/dist/server/tools/"'
-
 - name: Update dependencies
   become: true
   become_user: peertube
@@ -117,17 +97,23 @@
     - cd "{{ peertube_user_path }}/peertube-latest" && yarn install --production --pure-lockfile
     - cd "{{ peertube_user_path }}/peertube-latest/client" && yarn install --pure-lockfile
 
+- name: Install plugins npm package
+  become: true
+  become_user: peertube
+  shell: cd {{ peertube_user_path }}/peertube-latest && {{ item }}
+  with_items: "{{ peertube_plugins }}"
+
 - name: Copy script
   template:
     src: "enabledLDAP.sql"
     dest: /tmp/enabledLDAP.sql
     owner: postgres
     mode: 0755
+  when: peertube_ldap is defined
 
 - name: Add user and Enabled LDAP
   become: yes
   become_user: postgres
   command: psql -d peertube_prod -U postgres -f '/tmp/enabledLDAP.sql'
-  when:
-    - fresh_install is changed
-    - peertube_ldap is defined
+  when: peertube_ldap is defined
+  notify: restart peertube daemon
