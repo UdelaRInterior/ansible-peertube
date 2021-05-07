@@ -4,7 +4,8 @@ peertube_tld: localhost
 peertube_version: v1.0.0-beta.3
 peertube_user_path: /var/www/peertube
 peertube_proxy_handle_https: no
-peertube_proxy_ips: []
+peertube_trust_proxy:
+  - loopback
 peertube_dbuser_password: "{{ lookup('password', 'credentials/peertube/db-' + inventory_hostname) }}"
 peertube_user_password_hashed: "{{ lookup('password', 'credentials/peertube/user-' + inventory_hostname) |password_hash('sha512') }}"
 peertube_web_admin_password: "{{ lookup('password', 'credentials/peertube/web-admin-' + inventory_hostname) }}"
@@ -47,7 +48,7 @@ peertube_storage:
   plugins: '/plugin/'
   client_overrides: '/client_overrides/'
 
-peertube_settings_ldap:
+peertube_ldap:
 #  url: "ldaps://ldap.com.yy:636"
 #  weight: "100"
 #  bind-dn: "cn=admin,ou=group,dc=ldap,dc=com,dc=yy"
@@ -93,6 +94,6 @@ peertube_live:
       full_hd: false #2160p
 
 peertube_plugins:
-  - NODE_CONFIG_DIR={{ peertube_user_path }}/config NODE_ENV=production npm run plugin:install -- --npm-name peertube-plugin-auth-ldap
-  - NODE_CONFIG_DIR={{ peertube_user_path }}/config NODE_ENV=production npm run plugin:install -- --npm-name peertube-plugin-bittube-logo-favicon
-  - NODE_CONFIG_DIR={{ peertube_user_path }}/config NODE_ENV=production npm run plugin:install -- --npm-name peertube-theme-noussommes
+  - peertube-plugin-auth-ldap
+  - peertube-plugin-bittube-logo-favicon
+  - peertube-theme-noussommes

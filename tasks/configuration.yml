@@ -13,7 +13,7 @@
     owner: peertube
     group: peertube
     mode: 0755
-  with_items:
+  loop:
     - config
     - storage
     - versions
@@ -60,11 +60,6 @@
   notify:
     - restart peertube daemon
 
-- name: Display all variables/facts known for a host
-  debug:
-    var: peertube_plugins
-    verbosity: 4
-
 - name: Install Stretch backports repo
   apt_repository:
     repo: deb http://ftp.debian.org/debian stretch-backports main
@@ -91,17 +86,21 @@
   become: true
   become_user: peertube
   shell: '{{ item }}'
-  with_items:
+  loop:
     - cd "{{ peertube_user_path }}/peertube-latest" && npm install
     - cd "{{ peertube_user_path }}/peertube-latest/client" && npm install
     - cd "{{ peertube_user_path }}/peertube-latest" && yarn install --production --pure-lockfile
     - cd "{{ peertube_user_path }}/peertube-latest/client" && yarn install --pure-lockfile
 
+- name: Enabled service Peertube
+  service:
+    name: peertube
+    enabled: yes
+  notify: install peertube daemon
+
 - name: Install plugins npm package
-  become: true
-  become_user: peertube
-  shell: cd {{ peertube_user_path }}/peertube-latest && {{ item }}
-  with_items: "{{ peertube_plugins }}"
+  shell: cd {{ peertube_user_path }}/peertube-latest && sudo -u peertube NODE_CONFIG_DIR={{ peertube_user_path }}/config NODE_ENV=production npm run plugin:install -- --npm-name {{ item }}
+  loop: "{{ peertube_plugins }}"
 
 - name: Copy script
   template:

@@ -19,6 +19,6 @@
   postgresql_ext:
     name: '{{ item }}'
     db: peertube_prod
-  with_items:
+  loop:
     - pg_trgm
     - unaccent
