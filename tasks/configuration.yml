@@ -104,15 +104,15 @@
 
 - name: Copy script
   template:
-    src: "enabledLDAP.sql"
-    dest: /tmp/enabledLDAP.sql
+    src: ../vars/{{ item }}
+    dest: /tmp/{{ item }}
     owner: postgres
     mode: 0755
-  when: peertube_ldap is defined
+  loop: "{{ peertube_sql_extras }}"
 
 - name: Add user and Enabled LDAP
   become: yes
   become_user: postgres
-  command: psql -d peertube_prod -U postgres -f '/tmp/enabledLDAP.sql'
-  when: peertube_ldap is defined
+  command: psql -d peertube_prod -U postgres -f '/tmp/{{ item }}'
+  loop: "{{ peertube_sql_extras }}"
   notify: restart peertube daemon

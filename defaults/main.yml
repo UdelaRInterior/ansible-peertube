@@ -94,6 +94,9 @@ peertube_live:
       full_hd: false #2160p
 
 peertube_plugins:
-  - peertube-plugin-auth-ldap
-  - peertube-plugin-bittube-logo-favicon
-  - peertube-theme-noussommes
+#  - peertube-plugin-auth-ldap
+#  - peertube-plugin-bittube-logo-favicon
+#  - peertube-theme-noussommes
+
+peertube_sql_extras:
+  - sentences.sql
