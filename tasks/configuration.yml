@@ -104,7 +104,7 @@
 
 - name: Copy script
   template:
-    src: ../vars/{{ item }}
+    src: sql/{{ item }}
     dest: /tmp/{{ item }}
     owner: postgres
     mode: 0755
