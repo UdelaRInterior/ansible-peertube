@@ -51,15 +51,15 @@ peertube_storage:
 peertube_ldap:
 #  url: "ldaps://ldap.com.yy:636"
 #  weight: "100"
-#  bind-dn: "cn=admin,ou=group,dc=ldap,dc=com,dc=yy"
-#  custom-ca: ""
-#  search-base: "ou=group,dc=ldap,dc=com,dc=yy"
-#  group-filter: !unsafe "(member={{dn}})"
-#  insecure-tls: false
-#  mail-property: "mail"
-#  search-filter: !unsafe "(cn={{username}})"
-#  bind-credentials: "xxxxx"
-#  username-property: "cn"
+#  bind_dn: "cn=admin,ou=group,dc=ldap,dc=com,dc=yy"
+#  custom_ca: ""
+#  search_base: "ou=group,dc=ldap,dc=com,dc=yy"
+#  group_filter: !unsafe "(member={{dn}})"
+#  insecure_tls: false
+#  mail_property: "mail"
+#  search_filter: !unsafe "(cn={{username}})"
+#  bind_credentials: "xxxxx"
+#  username_property: "cn"
 
 peertube_instance:
   name: 'Peertube'
@@ -100,3 +100,6 @@ peertube_plugins:
 
 peertube_sql_extras:
   - sentences.sql
+
+peertube_video_quota: -1
+peertube_video_quota_daily: -1

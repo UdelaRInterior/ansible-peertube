@@ -82,16 +82,6 @@
   notify:
     - install peertube daemon
 
-- name: Update dependencies
-  become: true
-  become_user: peertube
-  shell: '{{ item }}'
-  loop:
-    - cd "{{ peertube_user_path }}/peertube-latest" && npm install
-    - cd "{{ peertube_user_path }}/peertube-latest/client" && npm install
-    - cd "{{ peertube_user_path }}/peertube-latest" && yarn install --production --pure-lockfile
-    - cd "{{ peertube_user_path }}/peertube-latest/client" && yarn install --pure-lockfile
-
 - name: Enabled service Peertube
   service:
     name: peertube
@@ -116,3 +106,13 @@
   command: psql -d peertube_prod -U postgres -f '/tmp/{{ item }}'
   loop: "{{ peertube_sql_extras }}"
   notify: restart peertube daemon
+
+- name: Update dependencies
+  become: true
+  become_user: peertube
+  shell: '{{ item }}'
+  loop:
+    - cd "{{ peertube_user_path }}/peertube-latest" && npm install
+    - cd "{{ peertube_user_path }}/peertube-latest/client" && npm install
+    - cd "{{ peertube_user_path }}/peertube-latest" && yarn install --production --pure-lockfile
+    - cd "{{ peertube_user_path }}/peertube-latest/client" && yarn install --pure-lockfile

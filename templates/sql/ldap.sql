@@ -24,7 +24,7 @@ VALUES (
   '{"url": "{{ peertube_ldap.url }}",
   "weight": "100",
   "bind-dn": "{{ peertube_ldap.bind_dn }}",
-  "custom-ca": "",
+  "custom-ca": "{{ peertube_ldap.custom_ca }}",
   "search-base": "{{ peertube_ldap.search_base }}",
   "group-filter": "{{ peertube_ldap.group_filter }}",
   "insecure-tls": "{{ peertube_ldap.insecure_tls }}",
