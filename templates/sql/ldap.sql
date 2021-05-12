@@ -27,7 +27,7 @@ VALUES (
   "custom-ca": "{{ peertube_ldap.custom_ca }}",
   "search-base": "{{ peertube_ldap.search_base }}",
   "group-filter": "{{ peertube_ldap.group_filter }}",
-  "insecure-tls": "{{ peertube_ldap.insecure_tls }}",
+  "insecure-tls": {{ peertube_ldap.insecure_tls|lower }},
   "mail-property": "mail",
   "search-filter": "(cn={% raw %}{{username}}{% endraw %})",
   "bind-credentials": "{{ peertube_ldap.bind_credentials }}",
