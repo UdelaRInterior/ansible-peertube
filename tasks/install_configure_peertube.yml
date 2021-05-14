@@ -92,7 +92,7 @@
   shell: cd {{ peertube_user_path }}/peertube-latest && sudo -u peertube NODE_CONFIG_DIR={{ peertube_user_path }}/config NODE_ENV=production npm run plugin:install -- --npm-name {{ item }}
   loop: "{{ peertube_plugins }}"
 
-- name: Copy script
+- name: Copy additional SQL queries
   template:
     src: sql/{{ item }}
     dest: /tmp/{{ item }}
@@ -100,7 +100,7 @@
     mode: 0755
   loop: "{{ peertube_sql_extras }}"
 
-- name: Add user and Enabled LDAP
+- name: Run additional SQL queries
   become: yes
   become_user: postgres
   command: psql -d peertube_prod -U postgres -f '/tmp/{{ item }}'

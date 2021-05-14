@@ -12,6 +12,7 @@
       --authenticator standalone \
       --installer nginx \
       -d {{ peertube_tld }} \
+      {% for item in peertube_alias %} -d {{ item }}{% endfor %} \
       -m {{ peertube_admin_email }} \
       --agree-tos \
       --pre-hook "systemctl stop nginx" \

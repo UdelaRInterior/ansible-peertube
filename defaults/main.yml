@@ -1,6 +1,7 @@
 ---
 # defaults file for peertube
-peertube_tld: localhost
+peertube_tld: '{{ inventory_hostname }}'
+#peertube_alias: []
 peertube_version: v1.0.0-beta.3
 peertube_user_path: /var/www/peertube
 peertube_proxy_handle_https: no
@@ -20,7 +21,7 @@ peertube_listen:
 
 peertube_webserver:
   https: true
-  hostname: '{{ inventory_hostname }}'
+  hostname: '{{ peertube_tld }}'
   port: 443
 
 peertube_database:

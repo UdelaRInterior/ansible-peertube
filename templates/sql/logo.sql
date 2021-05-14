@@ -1,3 +1,4 @@
+DELETE FROM "plugin" WHERE "name" = 'bittube-logo-favicon';
 INSERT INTO "plugin" (
   name,
   type,

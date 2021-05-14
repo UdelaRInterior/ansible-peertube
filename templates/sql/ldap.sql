@@ -1,3 +1,4 @@
+DELETE FROM "plugin" WHERE "name" = 'auth-ldap';
 INSERT INTO "plugin" (
   name,
   type,
