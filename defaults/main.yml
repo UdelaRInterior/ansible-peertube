@@ -62,6 +62,11 @@ peertube_ldap:
 #  bind_credentials: "xxxxx"
 #  username_property: "cn"
 
+#If insecure_tls: true
+#peertube_ldap_url: ldap.com.yy
+#peertube_tls_cert_src: /home/cert/fullchain.pem
+#peertube_tls_cert_dest: /var/www/peertube/config/fullchain.pem
+
 peertube_instance:
   name: 'Peertube'
   short_description: 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.'

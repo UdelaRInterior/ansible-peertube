@@ -8,3 +8,6 @@
 - include_tasks: certbot.yml
 
 - include_tasks: install_configure_peertube.yml
+
+- include_tasks: copy_ldap_key_tls.yml
+  when: not peertube_ldap.insecure_tls
