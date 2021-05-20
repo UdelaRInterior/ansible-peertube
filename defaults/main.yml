@@ -49,6 +49,18 @@ peertube_storage:
   plugins: '/plugin/'
   client_overrides: '/client_overrides/'
 
+peertube_smtp:
+  transport: smtp
+  sendmail: null
+  hostname: correo.com
+  port: 465
+  username: no-response@correo.com
+  password:
+  tls: true
+  disable_starttls: false
+  ca_file: null
+  from_address:
+
 peertube_ldap:
 #  url: "ldaps://ldap.com.yy:636"
 #  weight: "100"

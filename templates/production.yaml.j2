@@ -57,17 +57,17 @@ redis:
 # SMTP server to send emails
 smtp:
   # smtp or sendmail
-  transport: smtp
+  transport: {{ peertube_smtp.transport }}
   # Path to sendmail command. Required if you use sendmail transport
-  sendmail: null
-  hostname: null
-  port: 465 # If you use StartTLS: 587
-  username: null
-  password: null
-  tls: true # If you use StartTLS: false
-  disable_starttls: false
-  ca_file: null # Used for self signed certificates
-  from_address: 'admin@example.com'
+  sendmail: {{ peertube_smtp.sendmail }}
+  hostname: {{ peertube_smtp.hostname }}
+  port: {{ peertube_smtp.port }}
+  username: {{ peertube_smtp.username }}
+  password: {{ peertube_smtp.password }}
+  tls: {{ peertube_smtp.tls }}
+  disable_starttls: {{ peertube_smtp.disable_starttls }}
+  ca_file: {{ peertube_smtp.ca_file }}
+  from_address: '{{ peertube_smtp.from_address }}'
 
 email:
   body:
