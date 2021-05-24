@@ -1,7 +1,7 @@
 
 - name: Add peertube user
   user:
-    name: peertube
+    name: '{{ peertube_user }}'
     home: "{{ peertube_user_path }}"
     shell: /bin/bash
     password: "{{ peertube_user_password_hashed }}"
@@ -10,8 +10,8 @@
   file:
     path: "{{ peertube_user_path }}/{{ item }}"
     state: directory
-    owner: peertube
-    group: peertube
+    owner: '{{ peertube_user }}'
+    group: '{{ peertube_group }}'
     mode: 0755
   loop:
     - config
@@ -26,8 +26,8 @@
     src: "https://github.com/Chocobozzz/PeerTube/releases/download/{{ peertube_version }}/peertube-{{ peertube_version }}.zip"
     dest: "{{ peertube_user_path }}/versions"
     remote_src: yes
-    owner: peertube
-    group: peertube
+    owner: '{{ peertube_user }}'
+    group: '{{ peertube_group }}'
   when: peertube_version_dir.stat.exists == False
   register: fresh_install
 
@@ -39,23 +39,23 @@
     src: "{{ peertube_user_path }}/versions/peertube-{{ peertube_version }}"
     dest: "{{ peertube_user_path }}/peertube-latest"
     state: link
-    owner: peertube
-    group: peertube
+    owner: '{{ peertube_user }}'
+    group: '{{ peertube_group }}'
   when: peertube_latest_dir.stat.exists == False
 
 - name: Change owner of all peertube directories # seems setting owner on unarchive is not enough…
   file:
     path: "{{ peertube_user_path }}"
-    owner: peertube
-    group: peertube
+    owner: '{{ peertube_user }}'
+    group: '{{ peertube_group }}'
     recurse: yes
 
 - name: Copy configuration peertube
   template:
     src: "production.yaml.j2"
     dest: '{{ peertube_user_path }}/config/production.yaml'
-    owner: peertube
-    group: peertube
+    owner: '{{ peertube_user }}'
+    group: '{{ peertube_group }}'
     mode: 0644
   notify:
     - restart peertube daemon
@@ -96,20 +96,21 @@
   template:
     src: sql/{{ item }}
     dest: /tmp/{{ item }}
-    owner: postgres
+    owner: '{{ peertube_user }}'
+    group: '{{ peertube_group }}'
     mode: 0755
   loop: "{{ peertube_sql_extras }}"
 
 - name: Run additional SQL queries
   become: yes
-  become_user: postgres
+  become_user: '{{ postgres_user }}'
   command: psql -d peertube_prod -U postgres -f '/tmp/{{ item }}'
   loop: "{{ peertube_sql_extras }}"
   notify: restart peertube daemon
 
 - name: Update dependencies
   become: true
-  become_user: peertube
+  become_user: '{{ peertube_user }}'
   shell: '{{ item }}'
   loop:
     - cd "{{ peertube_user_path }}/peertube-latest" && npm install

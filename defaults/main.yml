@@ -2,6 +2,8 @@
 # defaults file for peertube
 peertube_tld: '{{ inventory_hostname }}'
 #peertube_alias: []
+peertube_user: peertube
+peertube_group: peertube
 peertube_version: v1.0.0-beta.3
 peertube_user_path: /var/www/peertube
 peertube_proxy_handle_https: no
@@ -11,6 +13,7 @@ peertube_dbuser_password: "{{ lookup('password', 'credentials/peertube/db-' + in
 peertube_user_password_hashed: "{{ lookup('password', 'credentials/peertube/user-' + inventory_hostname) |password_hash('sha512') }}"
 peertube_web_admin_password: "{{ lookup('password', 'credentials/peertube/web-admin-' + inventory_hostname) }}"
 peertube_admin_email: 'admin@example.com'
+peertube_db: peertube
 peertube_dbuser: peertube
 peertube_theme: default
 #Version 9 from Stretch and 12 from Buster

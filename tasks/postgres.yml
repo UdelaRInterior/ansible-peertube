@@ -1,24 +1,24 @@
 
 - name: Add peertube user in Postgres
   become: yes
-  become_user: postgres
+  become_user: "{{ peertube_user }}"
   postgresql_user:
-    name: peertube
+    name: "{{ peertube_dbuser }}"
     password: "{{ peertube_dbuser_password }}"
 
 - name: Add Postgres database
   become: yes
-  become_user: postgres
+  become_user: "{{ peertube_user }}"
   postgresql_db:
-    name: peertube_prod
-    owner: peertube
+    name: '{{ peertube_db }}_prod'
+    owner: '{{ peertube_dbuser }}'
 
 - name: Add pg_trgm and unaccent
   become: yes
-  become_user: postgres
+  become_user: "{{ peertube_user }}"
   postgresql_ext:
     name: '{{ item }}'
-    db: peertube_prod
+    db: '{{ peertube_db }}_prod'
   loop:
     - pg_trgm
     - unaccent
