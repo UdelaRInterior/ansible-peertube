@@ -13,6 +13,7 @@ peertube_dbuser_password: "{{ lookup('password', 'credentials/peertube/db-' + in
 peertube_user_password_hashed: "{{ lookup('password', 'credentials/peertube/user-' + inventory_hostname) |password_hash('sha512') }}"
 peertube_web_admin_password: "{{ lookup('password', 'credentials/peertube/web-admin-' + inventory_hostname) }}"
 peertube_admin_email: 'admin@example.com'
+peertube_postgres_user: postgres
 peertube_db: peertube
 peertube_dbuser: peertube
 peertube_theme: default

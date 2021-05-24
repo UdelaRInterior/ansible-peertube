@@ -103,7 +103,7 @@
 
 - name: Run additional SQL queries
   become: yes
-  become_user: '{{ postgres_user }}'
+  become_user: '{{ peertube_postgres_user }}'
   command: psql -d peertube_prod -U postgres -f '/tmp/{{ item }}'
   loop: "{{ peertube_sql_extras }}"
   notify: restart peertube daemon
