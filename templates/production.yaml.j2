@@ -301,17 +301,17 @@ import:
   # Add ability for your users to import remote videos (from YouTube, torrent...)
   videos:
     http: # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
-      enabled: false
+      enabled: {{ peertube_import.videos.http }}
 
       # IPv6 is very strongly rate-limited on most sites supported by youtube-dl
-      force_ipv4: false
+      force_ipv4: {{ peertube_import.videos.force_ipv4 }}
 
       # You can use an HTTP/HTTPS/SOCKS proxy with youtube-dl
       proxy:
-        enabled: false
-        url: ""
+        enabled: {{ peertube_import.videos.proxy.enable }}
+        url: {{ peertube_import.videos.proxy.url }}
     torrent: # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
-      enabled: false
+      enabled: {{ peertube_import.videos.torrent }}
 
 auto_blacklist:
   # New videos automatically blacklisted so moderators can review before publishing

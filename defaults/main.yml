@@ -125,3 +125,12 @@ peertube_sql_extras:
 
 peertube_video_quota: -1
 peertube_video_quota_daily: -1
+
+peertube_import:
+  videos:
+    http: false
+    force_ipv4: false
+    proxy:
+      enable: false
+      url: ""
+    torrent: false
