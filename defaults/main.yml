@@ -6,7 +6,7 @@ peertube_user: peertube
 peertube_group: peertube
 peertube_version: v1.0.0-beta.3
 peertube_user_path: /var/www/peertube
-peertube_proxy_handle_https: no
+peertube_proxy_handle_https: yes
 peertube_trust_proxy:
   - loopback
 peertube_dbuser_password: "{{ lookup('password', 'credentials/peertube/db-' + inventory_hostname) }}"
@@ -65,7 +65,7 @@ peertube_smtp:
   ca_file: null
   from_address:
 
-peertube_ldap:
+peertube_ldap: []
 #  url: "ldaps://ldap.com.yy:636"
 #  weight: "100"
 #  bind_dn: "cn=admin,ou=group,dc=ldap,dc=com,dc=yy"
@@ -113,9 +113,10 @@ peertube_live:
       normal: false #480p
       standard: false #720p
       hd: false #1080p
+      hhd: false #1440p
       full_hd: false #2160p
 
-peertube_plugins:
+peertube_plugins: []
 #  - peertube-plugin-auth-ldap
 #  - peertube-plugin-bittube-logo-favicon
 #  - peertube-theme-noussommes

@@ -15,7 +15,7 @@ server {
 }
 {% endif %}
 
-{% if peertube_alias %}
+{% if peertube_alias is defined %}
 server {
   {% if peertube_proxy_handle_https != 'yes' %}
     listen 443 ssl http2;
