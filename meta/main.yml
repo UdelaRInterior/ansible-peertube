@@ -18,5 +18,4 @@ galaxy_info:
     - web
     - peertube
 
-dependencies:
-  - kwoodson.yedit
+dependencies: []

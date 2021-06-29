@@ -1,0 +1,22 @@
+
+- name: Install certbot
+  apt:
+    pkg: python-certbot-nginx
+    state: latest
+  register: certbot_installed
+  when: peertube_proxy_handle_https != 'yes'
+
+- name: Install Letsencrypt certificate
+  shell: |
+    certbot certonly -n \
+      --authenticator standalone \
+      --installer nginx \
+      -d {{ peertube_tld }} \
+      {% if peertube_alias is defined %}{% for item in peertube_alias %} -d {{ item }}{% endfor %}{% endif %} \
+      -m {{ peertube_admin_email }} \
+      --agree-tos \
+      --pre-hook "systemctl stop nginx" \
+      --post-hook "systemctl start nginx"
+  when:
+   - certbot_installed is changed
+   - peertube_proxy_handle_https != 'yes'

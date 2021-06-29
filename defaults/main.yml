@@ -1,11 +1,137 @@
 ---
 # defaults file for peertube
-peertube_tld: localhost
+peertube_tld: '{{ inventory_hostname }}'
+#peertube_alias: []
+peertube_user: peertube
+peertube_group: peertube
 peertube_version: v1.0.0-beta.3
 peertube_user_path: /var/www/peertube
-peertube_proxy_handle_https: no
-peertube_proxy_ips: []
-
+peertube_proxy_handle_https: yes
+peertube_trust_proxy:
+  - loopback
 peertube_dbuser_password: "{{ lookup('password', 'credentials/peertube/db-' + inventory_hostname) }}"
 peertube_user_password_hashed: "{{ lookup('password', 'credentials/peertube/user-' + inventory_hostname) |password_hash('sha512') }}"
 peertube_web_admin_password: "{{ lookup('password', 'credentials/peertube/web-admin-' + inventory_hostname) }}"
+peertube_admin_email: 'admin@example.com'
+peertube_postgres_user: postgres
+peertube_db: peertube
+peertube_dbuser: peertube
+peertube_theme: default
+#Version 9 from Stretch and 12 from Buster
+peertube_nodejs_version: 12
+peertube_listen:
+  hostname: localhost
+  port: 9000
+
+peertube_webserver:
+  https: true
+  hostname: '{{ peertube_tld }}'
+  port: 443
+
+peertube_database:
+  hostname: 'localhost'
+  port: 5432
+  ssl: false
+  suffix: '_prod'
+  username: '{{ peertube_dbuser }}'
+  password: '{{ peertube_dbuser_password }}'
+  pool:
+    max: 5
+
+peertube_storage:
+  tmp: '/tmp/'
+  avatars: '/avatars/'
+  videos: '/videos/'
+  streaming_playlists: '/streaming_playlists/'
+  redundancy: '/redundancy/'
+  logs: '/logs/'
+  previews: '/previews/'
+  thumbnails: '/thumbnails/'
+  torrents: '/torrents/'
+  captions: '/captions/'
+  cache: '/cache/'
+  plugins: '/plugin/'
+  client_overrides: '/client_overrides/'
+
+peertube_smtp:
+  transport: smtp
+  sendmail: null
+  hostname: correo.com
+  port: 465
+  username: no-response@correo.com
+  password:
+  tls: true
+  disable_starttls: false
+  ca_file: null
+  from_address:
+
+peertube_ldap: []
+#  url: "ldaps://ldap.com.yy:636"
+#  weight: "100"
+#  bind_dn: "cn=admin,ou=group,dc=ldap,dc=com,dc=yy"
+#  custom_ca: ""
+#  search_base: "ou=group,dc=ldap,dc=com,dc=yy"
+#  group_filter: !unsafe "(member={{dn}})"
+#  insecure_tls: false
+#  mail_property: "mail"
+#  search_filter: !unsafe "(cn={{username}})"
+#  bind_credentials: "xxxxx"
+#  username_property: "cn"
+
+#If insecure_tls: true
+#peertube_ldap_url: ldap.com.yy
+#peertube_tls_cert_src: /home/cert/fullchain.pem
+#peertube_tls_cert_dest: /var/www/peertube/config/fullchain.pem
+
+peertube_instance:
+  name: 'Peertube'
+  short_description: 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.'
+  description: 'Welcome to this PeerTube instance!'
+  terms: 'No terms for now.'
+  code_of_conduct:
+  creation_reason: ''
+  administrator: ''
+  maintenance_lifetime: ''
+  moderation_information: ''
+  business_model: ''
+  hardware_information: ''
+
+peertube_live:
+  enabled: true
+  max_duration: -1
+  max_instance_lives: 20
+  max_user_lives: 3
+  allow_replay: true
+  rtmp:
+    port: 1935
+  transcoding:
+    enabled: true
+    threads: 2
+    resolutions:
+      very_small: false #240p
+      small: false #360p
+      normal: false #480p
+      standard: false #720p
+      hd: false #1080p
+      hhd: false #1440p
+      full_hd: false #2160p
+
+peertube_plugins: []
+#  - peertube-plugin-auth-ldap
+#  - peertube-plugin-bittube-logo-favicon
+#  - peertube-theme-noussommes
+
+peertube_sql_extras:
+  - sentences.sql
+
+peertube_video_quota: -1
+peertube_video_quota_daily: -1
+
+peertube_import:
+  videos:
+    http: false
+    force_ipv4: false
+    proxy:
+      enable: false
+      url: ""
+    torrent: false

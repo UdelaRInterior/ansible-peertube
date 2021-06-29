@@ -1,0 +1,48 @@
+---
+
+# Configure nodejs
+- name: Install apt key
+  apt_key:
+    url: '{{ item }}'
+    state: present
+  loop:
+    - https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    - https://dl.yarnpkg.com/debian/pubkey.gpg
+
+- name: Add apt repository
+  apt_repository:
+    repo: '{{ item }}'
+    state: present
+    filename: nodeandyarnsource
+  loop:
+    - deb https://deb.nodesource.com/node_"{{ peertube_nodejs_version }}".x "{{ ansible_distribution_release }}" main
+    - deb https://dl.yarnpkg.com/debian/ stable main
+
+- name: Install NodeJS
+  apt:
+    update_cache: yes
+    pkg: nodejs
+    state: present
+
+- name: Install dependencies
+  apt:
+    name: '{{ item }}'
+    state: latest
+  loop:
+    - curl
+    - sudo
+    - unzip
+    - vim
+    - nginx
+    - ffmpeg
+    - postgresql
+    - openssl
+    - g++
+    - make
+    - redis-server
+    - git
+    - python-psycopg2
+    - build-essential
+    - apt-transport-https
+    - python-ruamel.yaml
+    - yarn
