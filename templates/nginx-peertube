@@ -27,6 +27,8 @@ server {
     server_name {% for item in peertube_alias %} {{ item }}{% endfor %};
 
   {% if peertube_proxy_handle_https != 'yes' %}
+    ssl_certificate /etc/letsencrypt/live/{{ peertube_tld }}/cert.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ peertube_tld }}/privkey.pem;
     # Security hardening (as of 11/02/2018)
     ssl_protocols TLSv1.2; # TLSv1.3, TLSv1.2 if nginx >= 1.13.0
     ssl_prefer_server_ciphers on;
@@ -70,8 +72,9 @@ server {
   listen [::]:80;
 {% endif %}
   server_name {{ peertube_tld }};
-
 {% if peertube_proxy_handle_https != 'yes' %}
+  ssl_certificate /etc/letsencrypt/live/{{ peertube_tld }}/cert.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{ peertube_tld }}/privkey.pem;
   # Security hardening (as of 11/02/2018)
   ssl_protocols TLSv1.2; # TLSv1.3, TLSv1.2 if nginx >= 1.13.0
   ssl_prefer_server_ciphers on;
